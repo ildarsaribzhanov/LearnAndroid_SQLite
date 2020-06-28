@@ -18,7 +18,6 @@ public class AddUserActivity extends AppCompatActivity {
     private EditText group;
 
     private ArrayAdapter genderAdapter;
-    private List genderArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +29,7 @@ public class AddUserActivity extends AppCompatActivity {
         genderSpinner = findViewById(R.id.genderSpinner);
         group = findViewById(R.id.group);
 
-        genderArray = new ArrayList();
-        genderArray.add("Unknown");
-        genderArray.add("Male");
-        genderArray.add("Female");
-
-        genderAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, genderArray);
+        genderAdapter = ArrayAdapter.createFromResource(this, R.array.array_gender, android.R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         genderSpinner.setAdapter(genderAdapter);
