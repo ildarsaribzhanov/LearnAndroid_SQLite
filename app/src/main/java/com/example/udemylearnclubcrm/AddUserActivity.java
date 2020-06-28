@@ -14,8 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.udemylearnclubcrm.data.CRMContract;
 
 public class AddUserActivity extends AppCompatActivity {
     private EditText firstName;
@@ -60,15 +59,15 @@ public class AddUserActivity extends AppCompatActivity {
 
                 switch (selected) {
                     case "Male":
-                        gender = 1;
+                        gender = CRMContract.usersConf.GENDER_MALE;
                         break;
 
                     case "Female":
-                        gender = 2;
+                        gender = CRMContract.usersConf.GENDER_FEMALE;
                         break;
 
                     default:
-                        gender = 0;
+                        gender = CRMContract.usersConf.GENDER_UNKNOWN;
                         break;
                 }
             }
