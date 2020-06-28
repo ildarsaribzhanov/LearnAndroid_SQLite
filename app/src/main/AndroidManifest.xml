@@ -17,6 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".data.CrmContentProvider"
+            android:authorities="com.example.udemylearnclubcrm"
+            android:exported="false" />
     </application>
 
 </manifest>
