@@ -27,10 +27,18 @@ public class AddUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
 
+        bindElements();
+        initSpinner();
+    }
+
+    private void bindElements() {
         firstName = findViewById(R.id.firstName);
         lastName = findViewById(R.id.lastName);
         genderSpinner = findViewById(R.id.genderSpinner);
         group = findViewById(R.id.group);
+    }
+
+    private void initSpinner() {
 
         genderAdapter = ArrayAdapter.createFromResource(this, R.array.array_gender, android.R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
