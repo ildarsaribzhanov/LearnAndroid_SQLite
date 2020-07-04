@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.udemylearnclubcrm.data.CRMContract;
@@ -13,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView dataTextView;
+    ListView userListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton addUserBtn = findViewById(R.id.floatingActionButton);
 
-        dataTextView = findViewById(R.id.dataTextView);
+        userListView = findViewById(R.id.userListView);
 
         addUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,33 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(CRMContract.usersConf.CONTENT_URI, projection, null, null, null);
 
-        dataTextView.setText("All users\n\n");
-        dataTextView.append(CRMContract.usersConf.KEY_ID + " " +
-                CRMContract.usersConf.KEY_F_NAME + " " +
-                CRMContract.usersConf.KEY_L_NAME + " " +
-                CRMContract.usersConf.KEY_GENDER + " " +
-                CRMContract.usersConf.KEY_GROUP + "\n");
+        UserCursorAdapter adapter = new UserCursorAdapter(this, cursor, true);
 
-        int idIndex = cursor.getColumnIndex(CRMContract.usersConf.KEY_ID);
-        int fNameIndex = cursor.getColumnIndex(CRMContract.usersConf.KEY_F_NAME);
-        int lNameIndex = cursor.getColumnIndex(CRMContract.usersConf.KEY_L_NAME);
-        int genderIndex = cursor.getColumnIndex(CRMContract.usersConf.KEY_GENDER);
-        int groupIndex = cursor.getColumnIndex(CRMContract.usersConf.KEY_GROUP);
-
-        while (cursor.moveToNext()) {
-            int currentId = cursor.getInt(idIndex);
-            String currentFName = cursor.getString(fNameIndex);
-            String currentLName = cursor.getString(lNameIndex);
-            int currentGender = cursor.getInt(genderIndex);
-            String currentGroup = cursor.getString(groupIndex);
-
-            dataTextView.append(currentId + " " +
-                    currentFName + " " +
-                    currentLName + " " +
-                    currentGender + " " +
-                    currentGroup + "\n");
-        }
-
-        cursor.close();
+        userListView.setAdapter(adapter);
     }
 }
