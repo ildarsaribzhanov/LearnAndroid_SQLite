@@ -82,7 +82,22 @@ public class CrmContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase db = crmDbHelper.getWritableDatabase();
+
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case USERS_ALL:
+                return db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
+
+            case USER_ONE:
+                selection = CRMContract.usersConf._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
+
+            default:
+                throw new IllegalArgumentException("Can't query incorrect URI: " + uri);
+        }
     }
 
     @Override
