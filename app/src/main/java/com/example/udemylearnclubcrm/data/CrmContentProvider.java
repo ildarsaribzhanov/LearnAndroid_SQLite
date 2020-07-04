@@ -51,6 +51,8 @@ public class CrmContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Can't query incorrect URI: " + uri);
         }
 
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -88,6 +90,8 @@ public class CrmContentProvider extends ContentProvider {
                     return null;
                 }
 
+                getContext().getContentResolver().notifyChange(uri, null);
+
                 return ContentUris.withAppendedId(uri, id);
 
             default:
@@ -101,19 +105,29 @@ public class CrmContentProvider extends ContentProvider {
 
         int match = uriMatcher.match(uri);
 
+        int deletedRawCount = 0;
+
         switch (match) {
             case USERS_ALL:
-                return db.delete(CRMContract.usersConf.TABLE_NAME, null, null);
+                deletedRawCount = db.delete(CRMContract.usersConf.TABLE_NAME, null, null);
+                break;
 
             case USER_ONE:
                 selection = CRMContract.usersConf._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return db.delete(CRMContract.usersConf.TABLE_NAME, selection, selectionArgs);
+                deletedRawCount = db.delete(CRMContract.usersConf.TABLE_NAME, selection, selectionArgs);
+                break;
+
 
             default:
                 throw new IllegalArgumentException("Can't delete incorrect URI: " + uri);
         }
 
+        if (deletedRawCount > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return deletedRawCount;
     }
 
     @Override
@@ -150,18 +164,25 @@ public class CrmContentProvider extends ContentProvider {
 
         int match = uriMatcher.match(uri);
 
-        switch (match) {
-            case USERS_ALL:
-                return db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
+        int updatedRawCount = 0;
 
+        switch (match) {
             case USER_ONE:
                 selection = CRMContract.usersConf._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
+            case USERS_ALL:
+                updatedRawCount = db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
+                break;
 
             default:
                 throw new IllegalArgumentException("Can't update incorrect URI: " + uri);
         }
+
+        if (updatedRawCount > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return updatedRawCount;
     }
 
     @Override
