@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.udemylearnclubcrm.data.CRMContract;
+import com.example.udemylearnclubcrm.data.CRMContract.usersConf;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,16 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void viewData() {
         String[] projection = {
-                CRMContract.usersConf.KEY_ID,
-                CRMContract.usersConf.KEY_F_NAME,
-                CRMContract.usersConf.KEY_L_NAME,
-                CRMContract.usersConf.KEY_GENDER,
-                CRMContract.usersConf.KEY_GROUP,
+                usersConf.KEY_ID,
+                usersConf.KEY_F_NAME,
+                usersConf.KEY_L_NAME,
+                usersConf.KEY_GENDER,
+                usersConf.KEY_GROUP,
         };
 
-        Cursor cursor = getContentResolver().query(CRMContract.usersConf.CONTENT_URI, projection, null, null, null);
+        Cursor cursor = getContentResolver().query(usersConf.CONTENT_URI, projection, null, null, usersConf.KEY_ID + " DESC");
 
-        UserCursorAdapter adapter = new UserCursorAdapter(this, cursor, true);
+        UserCursorAdapter adapter = new UserCursorAdapter(this, cursor, false);
 
         userListView.setAdapter(adapter);
     }
