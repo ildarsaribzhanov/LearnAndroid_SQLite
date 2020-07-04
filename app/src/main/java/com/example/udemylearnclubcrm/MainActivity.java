@@ -1,6 +1,11 @@
 package com.example.udemylearnclubcrm;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,8 +16,11 @@ import android.widget.ListView;
 import com.example.udemylearnclubcrm.data.CRMContract.usersConf;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int USER_LOADER = 123;
+    UserCursorAdapter userCursorAdapter;
     ListView userListView;
 
     @Override
@@ -22,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton addUserBtn = findViewById(R.id.floatingActionButton);
 
-        userListView = findViewById(R.id.userListView);
-
         addUserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        userListView = findViewById(R.id.userListView);
+        userCursorAdapter = new UserCursorAdapter(this, null, true);
+        userListView.setAdapter(userCursorAdapter);
+
+        LoaderManager.getInstance(this).initLoader(USER_LOADER, null, this);
     }
 
+    @NonNull
     @Override
-    protected void onStart() {
-        super.onStart();
-        viewData();
-    }
-
-    private void viewData() {
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         String[] projection = {
                 usersConf.KEY_ID,
                 usersConf.KEY_F_NAME,
@@ -48,10 +56,18 @@ public class MainActivity extends AppCompatActivity {
                 usersConf.KEY_GROUP,
         };
 
-        Cursor cursor = getContentResolver().query(usersConf.CONTENT_URI, projection, null, null, usersConf.KEY_ID + " DESC");
+        CursorLoader cursorLoader = new CursorLoader(this, usersConf.CONTENT_URI, projection, null, null, usersConf.KEY_ID + " DESC");
 
-        UserCursorAdapter adapter = new UserCursorAdapter(this, cursor, false);
+        return cursorLoader;
+    }
 
-        userListView.setAdapter(adapter);
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        userCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        userCursorAdapter.swapCursor(null);
     }
 }

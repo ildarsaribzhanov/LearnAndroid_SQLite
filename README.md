@@ -5,3 +5,4 @@ Use
 - ContentProvider
 - ListView
 - CursorAdapter
+- LoaderCallbacks
