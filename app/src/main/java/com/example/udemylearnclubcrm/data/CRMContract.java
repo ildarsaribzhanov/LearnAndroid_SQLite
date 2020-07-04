@@ -12,7 +12,7 @@ public final class CRMContract {
 
     public static final String SCHEME = "content://";
     public static final String AUTHORITY = "com.example.udemylearnclubcrm";
-    public static final String PATH_MEMBERS = "users";
+    public static final String PATH_USERS = "users";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
@@ -29,6 +29,6 @@ public final class CRMContract {
         public static final int GENDER_MALE = 1;
         public static final int GENDER_FEMALE = 2;
 
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_MEMBERS);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_USERS);
     }
 }

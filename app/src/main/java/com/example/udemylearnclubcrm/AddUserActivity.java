@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.udemylearnclubcrm.data.CRMContract;
 
@@ -89,6 +93,7 @@ public class AddUserActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_user:
+                insertUser();
                 return true;
 
             case R.id.del_user:
@@ -99,5 +104,27 @@ public class AddUserActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void insertUser() {
+        String firstNameVal = firstName.getText().toString().trim();
+        String lastNameVal = lastName.getText().toString().trim();
+        String groupVal = group.getText().toString().trim();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CRMContract.usersConf.KEY_F_NAME, firstNameVal);
+        contentValues.put(CRMContract.usersConf.KEY_L_NAME, lastNameVal);
+        contentValues.put(CRMContract.usersConf.KEY_GENDER, gender);
+        contentValues.put(CRMContract.usersConf.KEY_GROUP, groupVal);
+
+        ContentResolver contentResolver = getContentResolver();
+        Uri uri = contentResolver.insert(CRMContract.usersConf.CONTENT_URI, contentValues);
+
+        if (uri == null) {
+            Toast.makeText(this, "Insert failed", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Toast.makeText(this, "Data saved", Toast.LENGTH_LONG).show();
     }
 }
