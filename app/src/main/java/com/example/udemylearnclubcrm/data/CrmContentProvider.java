@@ -56,6 +56,26 @@ public class CrmContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        String fName = values.getAsString(CRMContract.usersConf.KEY_F_NAME);
+        if (fName == null) {
+            throw new IllegalArgumentException("First Name must be set");
+        }
+
+        String lName = values.getAsString(CRMContract.usersConf.KEY_L_NAME);
+        if (lName == null) {
+            throw new IllegalArgumentException("Last Name must be set");
+        }
+
+        Integer gender = values.getAsInteger(CRMContract.usersConf.KEY_GENDER);
+        if (gender == null || gender < CRMContract.usersConf.GENDER_UNKNOWN || gender > CRMContract.usersConf.GENDER_FEMALE) {
+            throw new IllegalArgumentException("Illegal gender value");
+        }
+
+        String group = values.getAsString(CRMContract.usersConf.KEY_GROUP);
+        if (group == null) {
+            throw new IllegalArgumentException("Group must be set");
+        }
+
         SQLiteDatabase db = crmDbHelper.getWritableDatabase();
         int match = uriMatcher.match(uri);
 
@@ -98,6 +118,34 @@ public class CrmContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.containsKey(CRMContract.usersConf.KEY_F_NAME)) {
+            String fName = values.getAsString(CRMContract.usersConf.KEY_F_NAME);
+            if (fName == null) {
+                throw new IllegalArgumentException("First Name must be set");
+            }
+        }
+
+        if (values.containsKey(CRMContract.usersConf.KEY_L_NAME)) {
+            String lName = values.getAsString(CRMContract.usersConf.KEY_L_NAME);
+            if (lName == null) {
+                throw new IllegalArgumentException("Last Name must be set");
+            }
+        }
+
+        if (values.containsKey(CRMContract.usersConf.KEY_GENDER)) {
+            Integer gender = values.getAsInteger(CRMContract.usersConf.KEY_GENDER);
+            if (gender == null || gender < CRMContract.usersConf.GENDER_UNKNOWN || gender > CRMContract.usersConf.GENDER_FEMALE) {
+                throw new IllegalArgumentException("Illegal gender value");
+            }
+        }
+
+        if (values.containsKey(CRMContract.usersConf.KEY_GROUP)) {
+            String group = values.getAsString(CRMContract.usersConf.KEY_GROUP);
+            if (group == null) {
+                throw new IllegalArgumentException("Group must be set");
+            }
+        }
+
         SQLiteDatabase db = crmDbHelper.getWritableDatabase();
 
         int match = uriMatcher.match(uri);
