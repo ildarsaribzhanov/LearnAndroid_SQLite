@@ -8,7 +8,7 @@ public final class CRMContract {
     }
 
     public static final String DB_NAME = "crm_db";
-    public static final int DB_VER = 1;
+    public static final int DB_VER = 2;
 
     public static final String SCHEME = "content://";
     public static final String AUTHORITY = "com.example.udemylearnclubcrm";
@@ -23,7 +23,7 @@ public final class CRMContract {
         public static final String KEY_F_NAME = "firstName";
         public static final String KEY_L_NAME = "lastName";
         public static final String KEY_GENDER = "gender";
-        public static final String KEY_GROUP = "group_name";
+        public static final String KEY_GROUP = "groupName";
 
         public static final int GENDER_UNKNOWN = 0;
         public static final int GENDER_MALE = 1;
