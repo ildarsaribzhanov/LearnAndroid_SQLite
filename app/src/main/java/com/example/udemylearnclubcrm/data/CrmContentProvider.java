@@ -77,7 +77,23 @@ public class CrmContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase db = crmDbHelper.getWritableDatabase();
+
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case USERS_ALL:
+                return db.delete(CRMContract.usersConf.TABLE_NAME, null, null);
+
+            case USER_ONE:
+                selection = CRMContract.usersConf._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return db.delete(CRMContract.usersConf.TABLE_NAME, selection, selectionArgs);
+
+            default:
+                throw new IllegalArgumentException("Can't delete incorrect URI: " + uri);
+        }
+
     }
 
     @Override
@@ -96,7 +112,7 @@ public class CrmContentProvider extends ContentProvider {
                 return db.update(CRMContract.usersConf.TABLE_NAME, values, selection, selectionArgs);
 
             default:
-                throw new IllegalArgumentException("Can't query incorrect URI: " + uri);
+                throw new IllegalArgumentException("Can't update incorrect URI: " + uri);
         }
     }
 
