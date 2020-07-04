@@ -118,6 +118,18 @@ public class CrmContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return null;
+
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case USERS_ALL:
+                return CRMContract.usersConf.TYPE_MULTI;
+
+            case USER_ONE:
+                return CRMContract.usersConf.TYPE_SINGLE;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.udemylearnclubcrm.data;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -30,5 +31,8 @@ public final class CRMContract {
         public static final int GENDER_FEMALE = 2;
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_USERS);
+
+        public static final String TYPE_MULTI = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "." + PATH_USERS;
+        public static final String TYPE_SINGLE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "." + AUTHORITY + "." + PATH_USERS;
     }
 }
