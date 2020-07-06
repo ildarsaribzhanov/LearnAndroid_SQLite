@@ -2,6 +2,7 @@ package com.example.udemylearnclubcrm;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.loader.app.LoaderManager;
@@ -10,6 +11,7 @@ import androidx.loader.content.Loader;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -118,6 +120,11 @@ public class AddUserActivity extends AppCompatActivity
                 return true;
 
             case R.id.del_user:
+                if (currentUserUri == null) {
+                    Toast.makeText(this, "Only created user", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                showDeleteDialog();
                 return true;
 
             case android.R.id.home:
@@ -171,6 +178,8 @@ public class AddUserActivity extends AppCompatActivity
         }
 
         Toast.makeText(this, "Data saved", Toast.LENGTH_LONG).show();
+
+        finish();
     }
 
     private void updateUser(ContentValues contentValues) {
@@ -221,5 +230,42 @@ public class AddUserActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
+    }
+
+    private void showDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Delete the User?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteUser();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void deleteUser() {
+        if (currentUserUri == null) {
+            Toast.makeText(this, "Only created user", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int deletedCount = getContentResolver().delete(currentUserUri, null, null);
+
+        if (deletedCount == 0) {
+            Toast.makeText(this, "Fail delete user", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        finish();
     }
 }
