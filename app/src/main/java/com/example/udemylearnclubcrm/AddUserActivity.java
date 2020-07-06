@@ -6,6 +6,7 @@ import androidx.core.app.NavUtils;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +37,16 @@ public class AddUserActivity extends AppCompatActivity {
 
         bindElements();
         initSpinner();
+
+
+        Intent intent = getIntent();
+        Uri currentUserUri = intent.getData();
+
+        if (currentUserUri == null) {
+            setTitle("Add New User");
+        } else {
+            setTitle("Edit User");
+        }
     }
 
     private void bindElements() {

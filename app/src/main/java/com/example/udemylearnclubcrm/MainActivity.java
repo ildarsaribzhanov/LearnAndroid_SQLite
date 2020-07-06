@@ -7,10 +7,13 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.udemylearnclubcrm.data.CRMContract.usersConf;
@@ -43,6 +46,19 @@ public class MainActivity extends AppCompatActivity
         userListView.setAdapter(userCursorAdapter);
 
         LoaderManager.getInstance(this).initLoader(USER_LOADER, null, this);
+
+        userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+                Uri needUserUri = ContentUris.withAppendedId(usersConf.CONTENT_URI, id);
+
+                intent.setData(needUserUri);
+
+                startActivity(intent);
+            }
+        });
+
     }
 
     @NonNull
