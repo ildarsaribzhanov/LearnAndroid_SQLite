@@ -132,6 +132,21 @@ public class AddUserActivity extends AppCompatActivity
         String lastNameVal = lastName.getText().toString().trim();
         String groupVal = group.getText().toString().trim();
 
+        if (TextUtils.isEmpty(firstNameVal)) {
+            Toast.makeText(this, "First Name must by set", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(lastNameVal)) {
+            Toast.makeText(this, "Last Name must by set", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(groupVal)) {
+            Toast.makeText(this, "Group Name must by set", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(usersConf.KEY_F_NAME, firstNameVal);
         contentValues.put(usersConf.KEY_L_NAME, lastNameVal);
