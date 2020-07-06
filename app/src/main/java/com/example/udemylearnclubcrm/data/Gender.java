@@ -13,10 +13,14 @@ public class Gender {
             return "Male";
         }
 
-        if (gender == 22) {
+        if (gender == 2) {
             return "Female";
         }
 
         return "Unknown";
+    }
+
+    public int toInt() {
+        return this.gender;
     }
 }
