@@ -55,10 +55,24 @@ public class AddUserActivity extends AppCompatActivity
 
         if (currentUserUri == null) {
             setTitle("Add New User");
-        } else {
-            setTitle("Edit User");
-            LoaderManager.getInstance(this).initLoader(EDIT_USER_LOADER, null, this);
+            invalidateOptionsMenu();
+            return;
         }
+
+        setTitle("Edit User");
+        LoaderManager.getInstance(this).initLoader(EDIT_USER_LOADER, null, this);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (currentUserUri == null) {
+            MenuItem menuItem = menu.findItem(R.id.del_user);
+            menuItem.setVisible(false);
+        }
+
+        return true;
     }
 
     private void bindElements() {
